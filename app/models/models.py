@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 
 class GoogleEventShort(BaseModel):
+    id: str = None
     summary: str = None
     start: dict = None
 
