@@ -42,7 +42,7 @@ async def event_list():
             return data
 
 
-async def event_details(event_id):
+async def event_details(event_id: str):
     async with aiohttp.ClientSession() as session:
         url = f"http://app:8000/api/v1/google-calendar/{event_id}"
         async with session.get(url) as resp:
