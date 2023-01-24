@@ -27,6 +27,20 @@ services:
       - calendar_bot
     command: python3 main.py
 
+  watcher:
+    user: "1000:1000"
+    build:
+      context: ../../watcher
+    volumes:
+      - ../../watcher:/watcher
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - calendar_bot
+    command: python3 main.py
+
 networks:
   calendar_bot:
     name: calendar_bot
