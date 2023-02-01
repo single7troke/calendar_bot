@@ -8,14 +8,14 @@ from core import utils
 
 async def next_event(message: types.Message):
     data = await utils.event_list()
-    events = utils.format_time(data)
+    events = data["events"]
     event = await utils.event_details(events[0]["id"])
     await message.answer(json.dumps(event, indent=2, ensure_ascii=False))
 
 
 async def events_list(message: types.Message):
     data = await utils.event_list()
-    events = utils.format_time(data)
+    events = data["events"]
     keyboard = utils.create_keyboard(events)
 
     await message.answer(text="hello", reply_markup=keyboard)

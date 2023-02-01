@@ -1,21 +1,6 @@
-from datetime import datetime
-
 import aiohttp
 from aiogram import types
 from aiogram.filters.callback_data import CallbackData
-
-
-def format_time(data):
-    events = data["events"]
-    for event in events:
-        if "date" in event["start"]:
-            event["start"] = datetime.strptime(event["start"]["date"], "%Y-%m-%d").date().strftime("%Y-%B-%d")
-        else:
-            event["start"] = datetime.strptime(event["start"]["dateTime"], "%Y-%m-%dT%H:%M:%S%z").date().strftime(
-                "%Y-%B-%d")
-
-    events = sorted(events, key=lambda x: datetime.strptime(x["start"], "%Y-%B-%d"))
-    return events
 
 
 class GoogleEventCallback(CallbackData, prefix="id"):
