@@ -27,6 +27,21 @@ services:
       - calendar_bot
     command: python3 main.py
 
+  watcher:
+    user: "1000:1000"
+    build:
+      context: ../../watcher
+    volumes:
+      - ../../watcher:/watcher
+    env_file:
+      - .env
+    networks:
+      - calendar_bot
+    depends_on:
+      - app
+    restart: unless-stopped
+    command: python3 main.py
+
 networks:
   calendar_bot:
     name: calendar_bot

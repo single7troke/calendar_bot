@@ -10,7 +10,7 @@ stop_project:
 	docker-compose -f config/dev/docker-compose.yml down -v --remove-orphans
 
 build_project:
-	docker image rm dev-bot-1 dev-app-1
+	docker image rm dev-bot dev-app
 	docker-compose -f config/dev/docker-compose.yml build
 
 restart_bot:
