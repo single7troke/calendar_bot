@@ -35,10 +35,11 @@ services:
       - ../../watcher:/watcher
     env_file:
       - .env
-    ports:
-      - "8000:8000"
     networks:
       - calendar_bot
+    depends_on:
+      - app
+    restart: unless-stopped
     command: python3 main.py
 
 networks:
