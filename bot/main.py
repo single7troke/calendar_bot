@@ -22,8 +22,8 @@ async def send_welcome(message: types.Message):
 
 async def set_commands(bot: Bot):
     commands = [
-        BotCommand(command="start", description="Запустить бота"),
-        BotCommand(command="help", description="Помощь"),
+        BotCommand(command="start", description="Приветствие"),
+        BotCommand(command="about", description="Описание"),
         BotCommand(command="next", description="Ближайшее событие"),
         BotCommand(command="list", description="Список событий"),
     ]

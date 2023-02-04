@@ -2,6 +2,10 @@ import aiohttp
 from aiogram import types
 from aiogram.filters.callback_data import CallbackData
 
+from core.config import Config
+
+config = Config()
+
 
 class GoogleEventCallback(CallbackData, prefix="id"):
     event_id: str
@@ -21,7 +25,7 @@ def create_keyboard(events):
 
 async def event_list():
     async with aiohttp.ClientSession() as session:
-        url = "http://app:8000/api/v1/google-calendar"
+        url = config.url
         async with session.get(url) as resp:
             data = await resp.json()
             return data
@@ -29,7 +33,7 @@ async def event_list():
 
 async def event_details(event_id: str):
     async with aiohttp.ClientSession() as session:
-        url = f"http://app:8000/api/v1/google-calendar/{event_id}"
+        url = f"{config.url}{event_id}"
         async with session.get(url) as resp:
             data = await resp.json()
             return data
