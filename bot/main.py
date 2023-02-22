@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import os
 
 from aiogram import Bot, Dispatcher, types
@@ -32,6 +33,7 @@ async def set_commands(bot: Bot):
 
 
 async def main(bot: Bot, dp: Dispatcher):
+    await bot.delete_webhook()
     register_google_handlers(dp=dp)
     dp.message.outer_middleware(UserAccessMiddleware())
     await set_commands(bot)
@@ -39,4 +41,5 @@ async def main(bot: Bot, dp: Dispatcher):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     asyncio.run(main(bot, dp))
