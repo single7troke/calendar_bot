@@ -2,18 +2,19 @@ import argparse
 import asyncio
 import json
 import logging
-import os
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
-from aiogram.types import BotCommand
+from aiogram.types import BotCommand, FSInputFile
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiohttp import web
 
 from api.v1.google_calendar import register_google_handlers
+from core.config import Config
 from middleware.user_access import UserAccessMiddleware
 
 
+config = Config()
 parser = argparse.ArgumentParser()
 parser.add_argument('--webhook', action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
@@ -43,11 +44,13 @@ async def polling_setup(bot: Bot, dp: Dispatcher):
     await dp.start_polling(bot)
 
 
-async def webhook_setup(dispatcher: Dispatcher, bot: Bot):
+async def webhook_setup(bot: Bot):
     await bot.delete_webhook()
     await set_commands(bot)
-    # cert = FSInputFile("./cert/PUBLIC.pem")
-    await bot.set_webhook(f"https://194.67.109.17", ip_address="194.67.109.17")
+    cert = FSInputFile(config.path_to_pem_file)
+    await bot.set_webhook(url=config.server_url,
+                          ip_address=config.server_ip,
+                          certificate=cert)
     info = await bot.get_webhook_info()
     info = json.loads(info.json())
     logging.info(f"webhook info:\n{json.dumps(info, indent=4)}")
@@ -58,7 +61,7 @@ if __name__ == '__main__':
                         datefmt="%m/%d/%Y %I:%M:%S %p %Z",
                         level=logging.INFO)
 
-    bot = Bot(token=os.getenv("TG_BOT_TOKEN"), parse_mode="HTML")
+    bot = Bot(token=config.tg_bot_token, parse_mode="HTML")
     dp = Dispatcher()
     dp.message.register(Command(commands=["start"]))
     register_google_handlers(dp=dp)
