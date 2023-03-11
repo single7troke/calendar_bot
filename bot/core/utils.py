@@ -25,7 +25,7 @@ def create_keyboard(events):
 
 async def event_list():
     async with aiohttp.ClientSession() as session:
-        url = config.url
+        url = config.google_calendar_events_url
         async with session.get(url) as resp:
             data = await resp.json()
             return data
@@ -33,7 +33,7 @@ async def event_list():
 
 async def event_details(event_id: str):
     async with aiohttp.ClientSession() as session:
-        url = f"{config.url}{event_id}"
+        url = f"{config.google_calendar_events_url}{event_id}"
         async with session.get(url) as resp:
             data = await resp.json()
             return data
