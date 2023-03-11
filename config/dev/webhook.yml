@@ -1,4 +1,19 @@
 services:
+  web:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - /etc/ssl/private/YOURPRIVATE.key:/etc/ssl/private/YUORPRIVATE.key:ro
+      - /etc/ssl/certs/YOURPUBLIC.pem:/etc/ssl/certs/YOURPUBLIC.pem:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NGINX_PORT=80
+    networks:
+      - calendar_bot
+
   app:
     user: "1000:1000"
     build:
