@@ -13,38 +13,59 @@ from api.v1.google_calendar import register_google_handlers
 from core.config import Config
 from middleware.user_access import UserAccessMiddleware
 
-
 config = Config()
 parser = argparse.ArgumentParser()
 parser.add_argument('--webhook', action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 
 
-async def send_welcome(message: types.Message):
+async def welcome(message: types.Message):
     """
     This handler will be called when user sends `/start` command
     """
-    await message.reply("Hello🍻")
+    await message.reply("Hello my friend🍻")
+
+
+async def description(message: types.Message):
+    """
+    This handler will be called when user sends `/about` command
+    """
+    await message.reply("<b>Как этим пользоваться.</b>\n\n"
+                        "Нажми на меню и выбери команду.\n\n"
+                        "<b>/next</b> выведет описание ближайшего мероприятия.\n\n"
+                        "<b>/list</b> выведет список всех мероприятий\n"
+                        "в виде клавиатуры с датами мероприятий.\n"
+                        "Нажами на интересующую дату чтобы узнать детали мероприятия.\n\n"
+                        "Бот присылает сообщение если в календаре появилось/удалилось мероприятие\n"
+                        )
 
 
 async def set_commands(bot: Bot):
+    """
+    Sets commands menu.
+    """
     commands = [
-        BotCommand(command="start", description="Приветствие"),
-        BotCommand(command="about", description="Описание"),
-        BotCommand(command="next", description="Ближайшее событие"),
-        BotCommand(command="list", description="Список событий"),
+        BotCommand(command="next", description="Ближайшее мероприятие"),
+        BotCommand(command="list", description="Список мероприятий"),
+        BotCommand(command="about", description="Функционал"),
     ]
 
     await bot.set_my_commands(commands=commands)
 
 
 async def polling_setup(bot: Bot, dp: Dispatcher):
+    """
+    Run bot via polling.
+    """
     await bot.delete_webhook()
     await set_commands(bot)
     await dp.start_polling(bot)
 
 
 async def webhook_setup(bot: Bot):
+    """
+    Run bot via webhook.
+    """
     await bot.delete_webhook()
     await set_commands(bot)
     cert = FSInputFile(config.path_to_pem_file)
@@ -63,7 +84,7 @@ if __name__ == '__main__':
 
     bot = Bot(token=config.tg_bot_token, parse_mode="HTML")
     dp = Dispatcher()
-    dp.message.register(Command(commands=["start"]))
+    dp.message.register(description, Command(commands=["about"]))
     register_google_handlers(dp=dp)
     dp.message.outer_middleware(UserAccessMiddleware())
 

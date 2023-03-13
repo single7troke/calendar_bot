@@ -34,10 +34,11 @@ services:
       context: ../../bot
     volumes:
       - ../../bot:/bot
+      - /etc/ssl/certs/YOURPUBLIC.pem:/etc/ssl/certs/YOURPUBLIC.pem:ro
     env_file:
       - .env
-    ports:
-      - "8081:8081"
+    expose:
+      - "8080"
     networks:
       - calendar_bot
     command: python3 main.py --webhook
