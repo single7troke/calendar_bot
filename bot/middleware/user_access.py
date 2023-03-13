@@ -9,7 +9,6 @@ from core.config import Config
 
 
 config = Config()
-print(config.base_dir)
 users_id = []
 with open(os.path.join(config.base_dir, "users_id.json")) as file:
     data = json.load(file)

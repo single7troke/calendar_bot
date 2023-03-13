@@ -8,11 +8,11 @@ from core.models import EventType
 
 
 current_events = dict()
+users_id = []
 logging.basicConfig(format="%(asctime)s %(message)s",
                     datefmt="%m/%d/%Y %I:%M:%S %p %Z",
                     level=logging.INFO)
 
-users_id = []
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "users_id.json")) as file:
     data = json.load(file)
     for user_id in data["users"].values():
