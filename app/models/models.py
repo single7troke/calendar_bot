@@ -10,3 +10,14 @@ class GoogleEvent(BaseModel):
 
 class GoogleEventList(BaseModel):
     events: list[GoogleEvent] = []
+
+
+class BasicUser(BaseModel):
+    user_id: str
+
+
+class CreateUser(BasicUser):
+    name: str
+    role: str
+
+

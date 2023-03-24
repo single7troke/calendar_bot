@@ -1,5 +1,7 @@
 aiogoogle==5.1.0
+aioredis==2.0.1
 fastapi==0.89.1
-uvicorn==0.20.0
-pydantic==1.10.4
 orjson==3.8.5
+pydantic==1.10.4
+tenacity==8.2.2
+uvicorn==0.20.0
