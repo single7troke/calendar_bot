@@ -1,11 +1,14 @@
 import json
 
-from aiogram import types, Dispatcher
+from aiogram import types, Router
 from aiogram.filters import Command
 
-from core import utils
+from core import utils, keyboards
+
+router = Router()
 
 
+@router.message(Command(commands=("next",)))
 async def next_event(message: types.Message):
     data = await utils.event_list()
     events = data["events"]
@@ -13,24 +16,20 @@ async def next_event(message: types.Message):
     await message.answer(json.dumps(event, indent=2, ensure_ascii=False))
 
 
+@router.message(Command(commands=("list",)))
 async def events_list(message: types.Message):
     data = await utils.event_list()
     events = data["events"]
-    keyboard = utils.create_keyboard(events)
+    keyboard = keyboards.google_events_keyboard(events)
 
-    await message.answer(text="hello", reply_markup=keyboard)
+    await message.answer(text="Events:", reply_markup=keyboard)
 
 
+@router.callback_query(utils.GoogleEventCallback.filter())
 async def event_list_callbacks(
         callback: types.CallbackQuery,
-        callback_data: utils.GoogleEventCallback):
+        callback_data: keyboards.GoogleEventCallback):
 
     data = await utils.event_details(callback_data.event_id)
     await callback.message.answer(json.dumps(data, indent=2, ensure_ascii=False))
     await callback.answer()
-
-
-def register_google_handlers(dp: Dispatcher):
-    dp.message.register(events_list, Command(commands=("list",)))
-    dp.message.register(next_event, Command(commands=("next",)))
-    dp.callback_query.register(event_list_callbacks, utils.GoogleEventCallback.filter())
