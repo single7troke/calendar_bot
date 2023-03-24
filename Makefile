@@ -7,7 +7,7 @@ run:
 	docker-compose -f config/dev/polling.yml up -d
 
 stop:
-	docker-compose -f config/dev/polling.yml down -v --remove-orphans
+	docker-compose -f config/dev/polling.yml down --remove-orphans
 
 run_webhook:
 	docker-compose -f config/dev/webhook.yml up -d
