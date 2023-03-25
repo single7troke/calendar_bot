@@ -1,6 +1,4 @@
-import json
 import logging
-import os
 from time import sleep
 
 from core.utils import event_list, message_sender
@@ -8,15 +6,9 @@ from core.models import EventType
 
 
 current_events = dict()
-users_id = []
 logging.basicConfig(format="%(asctime)s %(message)s",
                     datefmt="%m/%d/%Y %I:%M:%S %p %Z",
                     level=logging.INFO)
-
-with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "users_id.json")) as file:
-    data = json.load(file)
-    for user_id in data["users"].values():
-        users_id.append(user_id)
 
 
 def fill_current_events():
@@ -63,7 +55,7 @@ def event_watcher():
                 messages[event] = f"{EventType.DELETE.value} {current_events[event][0]}"
 
         current_events = new_events
-        message_sender(users_id, messages)
+        message_sender(messages=messages)
 
         sleep(5)
 

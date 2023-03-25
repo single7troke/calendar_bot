@@ -1,4 +1,5 @@
 import json
+import re
 
 from aiogram import types, Router
 from aiogram.filters import Command
@@ -13,7 +14,8 @@ async def next_event(message: types.Message):
     data = await utils.event_list()
     events = data["events"]
     event = await utils.event_details(events[0]["id"])
-    await message.answer(json.dumps(event, indent=2, ensure_ascii=False))
+    await message.answer(f"<b>{event['summary']} - {event['start']}</b>\n\n"
+                         f"{event['description']}")
 
 
 @router.message(Command(commands=("list",)))
@@ -29,7 +31,7 @@ async def events_list(message: types.Message):
 async def event_list_callbacks(
         callback: types.CallbackQuery,
         callback_data: keyboards.GoogleEventCallback):
-
-    data = await utils.event_details(callback_data.event_id)
-    await callback.message.answer(json.dumps(data, indent=2, ensure_ascii=False))
+    event = await utils.event_details(callback_data.event_id)
+    await callback.message.answer(f"<b>{event['summary']} - {event['start']}</b>\n\n"
+                                  f"{event['description']}")
     await callback.answer()
