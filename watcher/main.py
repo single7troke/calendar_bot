@@ -16,17 +16,19 @@ logging.basicConfig(format="%(asctime)s %(message)s",
 
 def fill_current_events():
     data = event_list()
-    for event in data["events"]:
-        current_events[event["id"]] = {"start": event["start"], "description": event["description"]}
+    if "events" in data:
+        for event in data["events"]:
+            current_events[event["id"]] = {"start": event["start"], "description": event["description"]}
 
 
 def event_watcher():
     global current_events
     while True:
         data = event_list()
-        new_events = {
-            event["id"]: {"start": event["start"], "description": event["description"]} for event in data["events"]
-        }
+        new_events = dict()
+        if "events" in data:
+            for event in data["events"]:
+                new_events[event["id"]] = {"start": event["start"], "description": event["description"]}
         messages = dict()
 
         # Если все события идентичны, ничего не делаем.
