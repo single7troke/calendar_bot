@@ -117,7 +117,7 @@ if __name__ == '__main__':
         logging.info("Run webhook")
         dp.startup.register(webhook_setup)
         app = web.Application()
-        SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path="")
+        SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path="/calendar_bot")
         setup_application(app, dp, bot=bot)
         web.run_app(app)
     else:
