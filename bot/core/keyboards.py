@@ -17,12 +17,23 @@ class UserListCallback(CallbackData, prefix="user"):
     user_name: str
 
 
+class BackButtonCallback(CallbackData, prefix="back"):
+    data: str
+
+
+def back_button(text, callback_data):
+    buttons = [
+        [types.InlineKeyboardButton(text=text, callback_data=BackButtonCallback(data=callback_data).pack())]]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
+
+
 def google_events_keyboard(events) -> InlineKeyboardMarkup:
     buttons = list()
     for event in events:
         buttons.append(
             [types.InlineKeyboardButton(
-                text=event["start"],
+                text=f'{event["start"]}\t{event["summary"]}',
                 callback_data=GoogleEventCallback(event_id=event["id"]).pack())]
         )
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
