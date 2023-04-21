@@ -5,10 +5,6 @@ from core.config import Config
 config = Config()
 
 
-class GoogleEventCallback(CallbackData, prefix="id"):
-    event_id: str
-
-
 async def event_list():
     async with aiohttp.ClientSession() as session:
         url = f"{config.web_app_url}google-calendar/"
