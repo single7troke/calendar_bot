@@ -31,7 +31,7 @@ def back_button(text, callback_data):
 def google_events_keyboard(events) -> InlineKeyboardMarkup:
     buttons = list()
     for event in events:
-        text = f'{event["start"]} {event["summary"].split("/")[-1]}' if "отсутствует" not in event["summary"] else {event["start"]}
+        text = f'{event["start"]} {event["summary"].split("/")[-1]}' if "отсутствует" not in event["summary"] else event["start"]
         buttons.append(
             [types.InlineKeyboardButton(
                 text=text,
