@@ -27,7 +27,17 @@ async def events_list(message: types.Message):
     events = data["events"]
     keyboard = keyboards.google_events_keyboard(events)
 
-    await message.answer(text="Events:", reply_markup=keyboard)
+    await message.edit_text(text="Events:", reply_markup=keyboard)
+
+
+@router.callback_query(keyboards.MainMenuCallback.filter())
+async def main_menu_callback(
+        callback: types.CallbackQuery,
+        callback_data: keyboards.MainMenuCallback):
+    if callback_data.data == "next":
+        await next_event(callback.message)
+    elif callback_data.data == "list":
+        await events_list(callback.message)
 
 
 @router.callback_query(keyboards.MainMenuCallback.filter())
