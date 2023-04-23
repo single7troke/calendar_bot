@@ -21,7 +21,20 @@ class BackButtonCallback(CallbackData, prefix="back"):
     data: str
 
 
-def back_button(text, callback_data):
+class MainMenuCallback(CallbackData, prefix="main_menu"):
+    data: str
+
+
+def main_menu_keyboard():
+    buttons = [
+        [types.InlineKeyboardButton(text=config.buttons.next, callback_data=MainMenuCallback(data="next").pack())],
+        [types.InlineKeyboardButton(text=config.buttons.list, callback_data=MainMenuCallback(data="list").pack())]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
+
+
+def back_button(callback_data, text=config.buttons.back):
     buttons = [
         [types.InlineKeyboardButton(text=text, callback_data=BackButtonCallback(data=callback_data).pack())]]
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
@@ -31,11 +44,18 @@ def back_button(text, callback_data):
 def google_events_keyboard(events) -> InlineKeyboardMarkup:
     buttons = list()
     for event in events:
+        text = f'{event["start"]} {event["summary"].split("/")[-1]}' \
+            if "отсутствует" not in event["summary"] else event["start"]
         buttons.append(
             [types.InlineKeyboardButton(
-                text=f'{event["start"]}\t{event["summary"]}',
+                text=text,
                 callback_data=GoogleEventCallback(event_id=event["id"]).pack())]
         )
+    buttons.append(
+        [types.InlineKeyboardButton(text=config.buttons.back,
+                                    callback_data=BackButtonCallback(data="menu").pack())
+         ]
+    )
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
     return keyboard
 
