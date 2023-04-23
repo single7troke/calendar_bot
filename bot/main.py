@@ -64,8 +64,7 @@ async def set_commands(bot: Bot):
     Sets commands menu.
     """
     commands = [
-        BotCommand(command="next", description="Ближайшее мероприятие"),
-        BotCommand(command="list", description="Список мероприятий"),
+        BotCommand(command="menu", description="Меню"),
         BotCommand(command="about", description="Функционал"),
         BotCommand(command="admin", description="Админка"),
     ]
