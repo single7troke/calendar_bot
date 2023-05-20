@@ -39,7 +39,7 @@ def event_watcher():
 
         # Иначе сравниваем события
         for event in new_events:
-            # если события идентичны, то убираем событие из словоря current_events
+            # если события идентичны, то убираем событие из словаря current_events
             if event in current_events and new_events[event]["description"] == current_events[event]["description"]:
                 current_events.pop(event)
 
