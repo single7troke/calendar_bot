@@ -1,4 +1,3 @@
-import hashlib
 import logging
 from time import sleep
 
@@ -14,22 +13,19 @@ logging.basicConfig(format="%(asctime)s %(message)s",
                     level=logging.INFO)
 
 
-def fill_current_events():
+def create_event_dict(events_dict):
     data = event_list()
     if "events" in data:
         for event in data["events"]:
-            current_events[event["id"]] = {"start": event["start"], "description": event["description"]}
+            events_dict[event["start"]] = {"start": event["start"], "description": event["description"]}
 
 
 def event_watcher():
     global current_events
     while True:
-        data = event_list()
         new_events = dict()
-        if "events" in data:
-            for event in data["events"]:
-                new_events[event["id"]] = {"start": event["start"], "description": event["description"]}
         messages = dict()
+        create_event_dict(new_events)
 
         # Если все события идентичны, ничего не делаем.
         if current_events == new_events:
@@ -52,19 +48,14 @@ def event_watcher():
             # Если события нет в словаре current_events, создаем сообщение о новом событии
             elif event not in current_events:
                 logging.info(f"new event {new_events[event]['start']}")
-                messages[
-                    hashlib.md5(f"{event['description']}{event['start']}".encode()).hexdigest()
-                ] = f"{EventType.NEW.value} {new_events[event]['start']}"
+                messages[event] = f"{EventType.NEW.value} {new_events[event]['start']}"
 
         # Если в current_events остались события значит эти события были удалены.
         # Создаем сообщение/сообщения об удалении
         if current_events:
             for event in current_events:
-                if (name := hashlib.md5(f"{event['description']}{event['start']}".encode()).hexdigest()) in messages:
-                    messages.pop(name)
-                    continue
                 logging.info(f"event {current_events[event]['start']} deleted")
-                messages[name] = f"{EventType.DELETE.value} {current_events[event]['start']}"
+                messages[event] = f"{EventType.DELETE.value} {current_events[event]['start']}"
 
         current_events = new_events
         message_sender(messages=messages)
@@ -73,5 +64,5 @@ def event_watcher():
 
 
 if __name__ == "__main__":
-    fill_current_events()
+    create_event_dict(current_events)
     event_watcher()
