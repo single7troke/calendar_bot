@@ -13,7 +13,7 @@ stop_dev:
 	docker-compose -f config/dev/polling.yml down --remove-orphans
 
 stop_prod:
-	docker-compose -f config/prod/polling.yml down -v --remove-orphans
+	docker-compose -f config/prod/webhook.yml down -v --remove-orphans
 
 build_dev:
 	docker image rm dev-bot dev-app dev-watcher
