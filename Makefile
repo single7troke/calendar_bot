@@ -20,7 +20,7 @@ build_dev:
 	docker-compose -f config/dev/polling.yml build
 
 build_prod:
-	docker image rm dev-bot dev-app dev-watcher
+	docker image rm prod-bot prod-app prod-watcher
 	docker-compose -f config/prod/polling.yml build
 
 restart_bot:
