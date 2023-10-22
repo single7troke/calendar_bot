@@ -46,6 +46,10 @@ def google_events_keyboard(events) -> InlineKeyboardMarkup:
     for event in events:
         text = f'{event["start"]} {event["summary"].split("/")[-1]}' \
             if "отсутствует" not in event["summary"] else event["start"]
+        try:
+            text = chr(11088) + text if "ПОДТВЕРЖДЕНО" in event["description"] else text
+        except Exception as e:
+            pass
         buttons.append(
             [types.InlineKeyboardButton(
                 text=text,
