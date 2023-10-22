@@ -40,7 +40,7 @@ async def set_user_id(message: Message, state: FSMContext):
     cancel_button = keyboards.cancel_button()
     if user_id == "Cancel":
         await cancel_handler(message=message, state=state)
-    elif not user_id.isdigit() or not len(user_id) == 9:
+    elif not user_id.isdigit() or not len(user_id) in [9, 10]:
         await message.answer("Invalid id.\n"
                              "id should be nine-digit number\n"
                              "Try again",
